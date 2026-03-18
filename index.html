@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TDD 공유회 도장깨기 프로모션</title>
+    <!-- Tailwind CSS CDN 로드 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* 기본 폰트 설정 및 기타 전역 스타일 */
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+          'Helvetica Neue', Arial, sans-serif;
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-screen bg-neutral-900 text-neutral-100 font-sans selection:bg-red-600 selection:text-white"
+  >
+    <!-- 헤더 섹션 - 크게 박힌 '이의있음!' 그래픽 -->
+    <header
+      class="relative pt-12 pb-16 px-4 text-center border-b border-red-900/50 bg-gradient-to-b from-neutral-950 to-neutral-900 overflow-hidden flex flex-col items-center"
+    >
+      <div
+        class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(220,38,38,0.14),transparent_38%),linear-gradient(to_bottom,transparent,rgba(0,0,0,0.32))] pointer-events-none"
+      ></div>
+      <!-- 정적인 '이의있음!' 그래픽 텍스트 -->
+      <div
+        class="relative flex justify-center items-center w-full max-w-3xl h-56 md:h-72 mb-8"
+      >
+        <!-- 폭발형 배경 효과 (CSS 도형) -->
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div
+            class="w-full h-full max-w-[120%] max-h-[120%] bg-white scale-x-125 rotate-6 shadow-[0_0_50px_rgba(255,255,255,0.8)] [clip-path:polygon(50%_0%,61%_35%,98%_35%,68%_57%,79%_91%,50%_70%,21%_91%,32%_57%,2%_35%,39%_35%)]"
+          ></div>
+        </div>
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div
+            class="w-[95%] h-[95%] max-w-[110%] max-h-[110%] bg-red-600 scale-x-125 -rotate-3 [clip-path:polygon(50%_0%,61%_35%,98%_35%,68%_57%,79%_91%,50%_70%,21%_91%,32%_57%,2%_35%,39%_35%)]"
+          ></div>
+        </div>
+
+        <!-- 메인 텍스트 -->
+        <h1
+          class="relative text-[5.5rem] md:text-[8rem] font-black text-red-600 italic tracking-tighter whitespace-nowrap transform -rotate-12 drop-shadow-[0_5px_0_rgba(255,255,255,1)] md:drop-shadow-[0_8px_0_rgba(255,255,255,1)] stroke-white"
+          style="-webkit-text-stroke: 4px white"
+        >
+          이의있음!
+        </h1>
+      </div>
+
+      <div class="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
+        <div
+          class="inline-block bg-red-600 text-white text-xs md:text-sm font-bold px-3 py-1.5 mb-6 rounded-sm uppercase tracking-[0.28em] shadow-[0_0_15px_rgba(220,38,38,0.5)]"
+        >
+          TDD 도장깨기 공유회
+        </div>
+        <h2
+          class="text-4xl md:text-5xl font-black mb-5 tracking-tight leading-[1.15] break-keep"
+        >
+          우리의 TDD 원칙,<br />
+          <span class="text-red-500">반박할 자신 있습니까?</span>
+        </h2>
+        <p class="text-base md:text-xl text-neutral-300 max-w-2xl break-keep leading-relaxed">
+          저희 팀이 치열하게 정립한 8가지 TDD 철학입니다.
+          <br class="hidden md:block" />이 완벽한 논리에 틈이 보인다면, 언제든
+          공유회에서 이의를 제기해 보십시오.
+        </p>
+      </div>
+    </header>
+
+    <!-- 8가지 질문 리스트 섹션 -->
+    <main class="max-w-5xl mx-auto px-4 py-14">
+      <div class="max-w-3xl mb-8 md:mb-10">
+        <p class="text-xs font-black uppercase tracking-[0.26em] text-red-400/90 mb-3">
+          Debate Agenda
+        </p>
+        <h2 class="text-2xl md:text-3xl font-black text-white break-keep leading-tight">
+          질문은 짧고 선명하게,
+          <span class="text-neutral-300">입장은 바로 읽히게 정리했습니다.</span>
+        </h2>
+      </div>
+      <div
+        id="questions-container"
+        class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5"
+      >
+        <!-- JavaScript로 렌더링될 영역 -->
+      </div>
+    </main>
+
+    <!-- 행사 안내 및 지도 섹션 -->
+    <section class="bg-neutral-950 py-16 px-4 border-t border-red-900/30">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-black text-white mb-4">
+            자신 있다면 직접 오셔서 반박하십시오.
+          </h2>
+          <p class="text-neutral-300 text-base md:text-lg break-keep leading-relaxed">
+            완벽한 논리로 무장하고 기다리겠습니다. 당신의 크루에 맞는 시간에
+            찾아오십시오.
+          </p>
+        </div>
+
+        <!-- 일정 및 장소 정보 카드 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+          <!-- 프론트엔드 크루 -->
+          <div
+            class="bg-neutral-900 border border-red-900/50 hover:border-red-500 transition-colors rounded-xl p-6 flex items-start gap-5 shadow-lg"
+          >
+            <div class="text-4xl drop-shadow-[0_0_10px_rgba(220,38,38,0.8)]">
+              ⚔️
+            </div>
+            <div>
+              <h3 class="text-xl font-black text-white mb-2">
+                프론트엔드 크루
+              </h3>
+              <p class="text-red-400 font-bold mb-1">오전 10:00</p>
+              <p class="text-neutral-300">
+                장소: 라이브러리 옆
+                <span
+                  class="font-bold text-white bg-red-900/40 px-2 py-0.5 rounded"
+                  >페 7 / 페 8</span
+                >
+              </p>
+            </div>
+          </div>
+
+          <!-- 백엔드 크루 -->
+          <div
+            class="bg-neutral-900 border border-blue-900/50 hover:border-blue-500 transition-colors rounded-xl p-6 flex items-start gap-5 shadow-lg"
+          >
+            <div class="text-4xl drop-shadow-[0_0_10px_rgba(59,130,246,0.8)]">
+              🛡️
+            </div>
+            <div>
+              <h3 class="text-xl font-black text-white mb-2">백엔드 크루</h3>
+              <p class="text-blue-400 font-bold mb-1">오후 3:00</p>
+              <p class="text-neutral-300">
+                장소:
+                <span
+                  class="font-bold text-white bg-blue-900/40 px-2 py-0.5 rounded"
+                  >보이저</span
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 직접 그린 CSS 도면 및 하이라이트 오버레이 -->
+        <div
+          class="relative max-w-5xl mx-auto border-2 border-neutral-700 rounded-xl overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.5)] bg-neutral-200 p-2 md:p-6"
+        >
+          <div
+            id="map-container"
+            class="relative w-full aspect-[4/3] md:aspect-[16/9] lg:aspect-[3/2] bg-white border-4 border-neutral-800 rounded-sm"
+          >
+            <!-- JavaScript로 렌더링될 영역 -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 하단 푸터 (간소화) -->
+    <footer class="border-t border-neutral-900 bg-black py-8 text-center">
+      <p class="text-sm text-neutral-600">
+        본 페이지는 공유회 분위기 조성을 위한 도발 컨셉으로 제작되었습니다.
+        <br class="md:hidden" />실제로는 평화롭고 유익한 토론을 지향합니다! 😊
+      </p>
+    </footer>
+
+    <!-- 스크립트: 데이터와 렌더링 로직 -->
+    <script>
+      // TDD 토론 주제 및 입장 데이터
+      const questions = [
+        {
+          id: 1,
+          title: 'TDD 설계 단계에서 어느 정도 깊이까지 생각할지',
+          stance:
+            '어떤 클래스가 어떤 기능을 갖고 있는지까지만 생각하고, 클래스명과 메서드명 등 내부 구조가 어떻게 되어 있는지는 생각하지 않는다.',
+        },
+        {
+          id: 2,
+          title: 'getter 메서드에 대한 테스트를 작성할 필요가 있을까?',
+          stance: 'getter 자체에 대한 테스트는 필요 없다.',
+        },
+        {
+          id: 3,
+          title:
+            '하나의 큰 메서드가 여러 개의 작은 메서드를 품고 있다면, 하위 메서드들까지 테스트해야 할까?',
+          stance: '작은 메서드까지 모두 테스트해야 한다.',
+        },
+        {
+          id: 4,
+          title: '테스트 코드를 작성할 때 예외 테스트 케이스부터?',
+          stance:
+            '정상 작동 케이스를 먼저 작성하고, 예외 테스트 코드를 작성한다.',
+        },
+        {
+          id: 5,
+          title:
+            '시간이 없는 상황에서의 TDD, 시간 낭비인가? 미래를 위한 투자인가.',
+          stance: '미래에 편하게 유지보수 하기 위한 정당한 시간 투자이다.',
+        },
+        {
+          id: 6,
+          title: 'TDD를 할 때 핵심이 되는 로직부터 해야 될까?',
+          stance: '핵심 로직 먼저 하는 게 맞다.',
+        },
+        {
+          id: 7,
+          title: 'Mock(모킹)이 적을수록 TDD를 잘 실천한 것일까?',
+          stance: '모킹의 빈도가 적을수록 TDD를 잘 실천한 것이다.',
+        },
+        {
+          id: 8,
+          title: '유틸 테스트를 해야 될까?',
+          stance:
+            '유틸 함수를 테스트하는 것은 언어 자체를 테스트하는 것과 같기 때문에 필요 없다.',
+        },
+      ];
+
+      // 도면 데이터 (좌표 및 크기 퍼센트)
+      const mapRooms = [
+        {
+          id: '페7-8',
+          name: '페 7\n페 8',
+          top: '4%',
+          left: '3%',
+          width: '7%',
+          height: '13%',
+          isFE: true,
+        },
+        {
+          id: '페9-10',
+          name: '페 9\n페 10',
+          top: '21%',
+          left: '3%',
+          width: '7%',
+          height: '13%',
+        },
+        {
+          id: '페11-12',
+          name: '페 11\n페 12',
+          top: '38%',
+          left: '3%',
+          width: '7%',
+          height: '13%',
+        },
+        {
+          id: '페13-14',
+          name: '페 13\n페 14',
+          top: '55%',
+          left: '3%',
+          width: '7%',
+          height: '13%',
+        },
+        {
+          id: '라이브러리',
+          name: '라이브러리',
+          top: '4%',
+          left: '12%',
+          width: '42%',
+          height: '30%',
+        },
+        {
+          id: '코워킹존',
+          name: '코워킹 존',
+          top: '38%',
+          left: '12%',
+          width: '18%',
+          height: '30%',
+        },
+        {
+          id: '작은강의실',
+          name: '작은 강의실',
+          top: '72%',
+          left: '3%',
+          width: '27%',
+          height: '24%',
+        },
+        {
+          id: '캔틴',
+          name: '캔틴',
+          top: '72%',
+          left: '32%',
+          width: '15%',
+          height: '24%',
+        },
+        {
+          id: '출입구',
+          name: '출입구',
+          top: '38%',
+          left: '32%',
+          width: '43%',
+          height: '30%',
+        },
+        {
+          id: '보이저',
+          name: '보이저',
+          top: '4%',
+          left: '56%',
+          width: '9%',
+          height: '14%',
+          isBE: true,
+        },
+        {
+          id: '아폴로',
+          name: '아폴로',
+          top: '20%',
+          left: '56%',
+          width: '9%',
+          height: '14%',
+        },
+        {
+          id: '디스커버리',
+          name: '디스커버리',
+          top: '4%',
+          left: '67%',
+          width: '9%',
+          height: '14%',
+        },
+        {
+          id: '허블',
+          name: '허블',
+          top: '20%',
+          left: '67%',
+          width: '9%',
+          height: '14%',
+        },
+        {
+          id: '공조실',
+          name: '공조실',
+          top: '4%',
+          left: '78%',
+          width: '19%',
+          height: '30%',
+        },
+        {
+          id: '화장실',
+          name: '화장실',
+          top: '38%',
+          left: '78%',
+          width: '19%',
+          height: '30%',
+        },
+        {
+          id: '서버실',
+          name: '서버실',
+          top: '72%',
+          left: '78%',
+          width: '19%',
+          height: '24%',
+        },
+        {
+          id: '코치2',
+          name: '코치 2',
+          top: '72%',
+          left: '49%',
+          width: '10%',
+          height: '24%',
+        },
+        {
+          id: '코치룸',
+          name: '코치룸',
+          top: '72%',
+          left: '61%',
+          width: '15%',
+          height: '24%',
+        },
+      ];
+
+      // DOM 요소가 모두 로드된 후 렌더링 실행
+      document.addEventListener('DOMContentLoaded', () => {
+        // 1. 질문 리스트 렌더링
+        const questionsContainer = document.getElementById(
+          'questions-container',
+        );
+        questionsContainer.innerHTML = questions
+          .map(
+            (item, index) => `
+        <div class="bg-gradient-to-b from-neutral-800 to-neutral-900 border border-neutral-700/90 rounded-xl p-4 md:p-5 flex flex-col shadow-lg transition-all duration-300 hover:-translate-y-1.5 hover:border-red-500 hover:shadow-[0_10px_30px_-15px_rgba(220,38,38,0.3)] group">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="text-red-500 font-black text-lg md:text-xl opacity-70 group-hover:opacity-100 transition-opacity">
+              Q${index + 1}
+            </div>
+            <div class="h-px flex-1 bg-gradient-to-r from-red-500/50 to-transparent"></div>
+          </div>
+          <h2 class="text-lg md:text-xl font-black mb-3 text-white break-keep leading-snug">
+            ${item.title}
+          </h2>
+          <div class="bg-black/25 rounded-lg p-4 border border-white/5 border-l-4 border-l-red-500 flex-grow">
+            <p class="text-[0.7rem] font-bold uppercase tracking-[0.22em] text-red-300/85 mb-2">
+              Our Stance
+            </p>
+            <p class="text-sm md:text-base font-medium text-neutral-100 break-keep leading-relaxed">
+              "${item.stance}"
+            </p>
+          </div>
+        </div>
+      `,
+          )
+          .join('');
+
+        // 2. 도면 지도 렌더링
+        const mapContainer = document.getElementById('map-container');
+        mapContainer.innerHTML = mapRooms
+          .map((room) => {
+            const baseClasses =
+              'absolute flex items-center justify-center text-center font-bold whitespace-pre-line text-[0.6rem] sm:text-sm md:text-base leading-tight rounded-[2px]';
+
+            // 기본 스타일 vs 하이라이트 스타일
+            let dynamicClasses =
+              'bg-white border-[2px] md:border-4 border-neutral-600 text-neutral-800';
+            let tooltipHTML = '';
+
+            if (room.isFE) {
+              dynamicClasses =
+                'bg-red-500/20 border-[3px] md:border-4 border-red-500 text-red-700 animate-pulse z-10 cursor-help group shadow-[0_0_15px_rgba(220,38,38,0.5)]';
+              tooltipHTML = `
+            <div class="absolute -top-10 md:-top-12 bg-red-600 text-white text-xs sm:text-sm px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg z-20">
+              FE 크루 (오전 10시)
+            </div>
+          `;
+            } else if (room.isBE) {
+              dynamicClasses =
+                'bg-blue-500/20 border-[3px] md:border-4 border-blue-500 text-blue-700 animate-pulse z-10 cursor-help group shadow-[0_0_15px_rgba(59,130,246,0.5)]';
+              tooltipHTML = `
+            <div class="absolute -top-10 md:-top-12 bg-blue-600 text-white text-xs sm:text-sm px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg z-20">
+              BE 크루 (오후 3시)
+            </div>
+          `;
+            }
+
+            return `
+          <div 
+            class="${baseClasses} ${dynamicClasses}"
+            style="top: ${room.top}; left: ${room.left}; width: ${room.width}; height: ${room.height};"
+          >
+            ${room.name}
+            ${tooltipHTML}
+          </div>
+        `;
+          })
+          .join('');
+      });
+    </script>
+  </body>
+</html>
